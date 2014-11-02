@@ -13,6 +13,8 @@ class Whonix_repository_Wizard(QtGui.QWizard):
     def setupUi(self):
         self.resize(500, 360)
         self.setWindowTitle('Whonix Repository wizard')
+        icon = "/usr/share/icons/anon-icon-pack/whonix.ico"
+        self.setWindowIcon(QtGui.QIcon(icon))
 
         self.button(QtGui.QWizard.NextButton).clicked.connect(self.NextButton_clicked)
         self.button(QtGui.QWizard.CancelButton).clicked.connect(self.CancelButton_clicked)
@@ -114,5 +116,5 @@ if __name__ == "__main__":
     command = 'whonix_repository --enable' + codename
     exit_code = call(command, shell=True)
     print exit_code
-    msg = QtGui.QMessageBox.information(wizard, 'Message', 'whonix_repository was succesful, or whataver according to exit code', QtGui.QMessageBox.Ok)
+    msg = QtGui.QMessageBox.information(wizard, 'Message', 'whonix_repository was succesful, or whatever according to exit code', QtGui.QMessageBox.Ok)
     sys.exit()
