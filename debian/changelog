@@ -1,4 +1,10 @@
-control-port-filter-python (3:0.1-1) unstable; urgency=low
+whonix-repository-wizard (3:0.2-1) unstable; urgency=low
+
+  * New upstream version.
+
+ -- troubadour <trobador@riseup.net>  Mon, 03 Nov 2014 06:52:09 +0000
+
+whonix-repository-wizard (3:0.1-1) unstable; urgency=low
 
   * New upstream version.
 

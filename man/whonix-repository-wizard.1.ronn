@@ -1,4 +1,4 @@
-whonix-repository-wizard(8) 
+whonix-repository-wizard(1) -- enable, configure or disable Whonix apt repository
 ============================
 
 <span class="comment">
@@ -16,15 +16,15 @@ whonix-repository-wizard(8)
 
 ## SYNOPSIS
 
-`
+`whonix-repository-wizard`
 
 ## DESCRIPTION
 
-
-## CONFIG FILE
-
+Graphical user interface for `whonix_repository` tool.
 
 ## WWW
+
+https://www.whonix.org/wiki/Whonix-APT-Repository
 
 ## AUTHOR
 
