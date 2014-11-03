@@ -4,6 +4,7 @@ from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import qDebug
 from subprocess import call
 import os
+import inspect
 
 class Whonix_repository_Wizard(QtGui.QWizard):
     def __init__(self):
@@ -12,7 +13,7 @@ class Whonix_repository_Wizard(QtGui.QWizard):
 
     def setupUi(self):
         self.resize(500, 360)
-        self.setWindowTitle('Whonix Repository wizard')
+        self.setWindowTitle('Whonix Repository Wizard')
         icon = "/usr/share/icons/anon-icon-pack/whonix.ico"
         self.setWindowIcon(QtGui.QIcon(icon))
 
@@ -56,22 +57,24 @@ class Whonix_repository_Wizard(QtGui.QWizard):
         self.repo3.setGeometry(QtCore.QRect(30, 60, 300, 21))
         self.addPage(self.pageRepos)
 
-        self.introText.setText('Description of whonix_repository here')
+        self.introText.setText('Whonix Repository Wizard')
 
         self.enableText.setText("""<p><B>Automatically install updates from the Whonix team?</B></p><p>\n
 Whonix News (via whonixcheck) will notify you of available updates.</p>
 <p>When you run</p><blockquote>sudo apt-get dist-upgrade</blockquote>
 <p>updates from the Whonix team will be AUTOMATICALLY downloaded and installed,
 along with updates from the Debian team. Please read <a href=https://www.whonix.org/wiki/Trust>https://www.whonix.org/wiki/Trust</a> to understand the risks. </p>
-<p>You can always start the Whonix Repository Tool again by running:</p><blockquote>sudo whonix_repository</blockquote>
+
 """)
 
-        self.repoText.setText("Description here")
+        self.repoText.setText("""<p>Which Whonix Repository would you like to receive updates from?<br></br>
+<br></br>
+Most users should select the Stable repository.</p>""")
 
         self.enableButton.setText("Yes. Automatically install updates from the Whonix team.")
         self.disableButton.setText("No. I will manually update from source code.")
 
-        self.repoGroup.setTitle("Repository")
+        self.repoGroup.setTitle("Whonix Repository Wizard")
         self.repo1.setText("Whonix Stable Repository")
         self.repo2.setText("Whonix Testers Repository")
         self.repo3.setText("Whonix Developers Repository")
@@ -82,13 +85,12 @@ along with updates from the Debian team. Please read <a href=https://www.whonix.
             command = 'whonix_repository --disable'
             #self.close()
             exit_code = call(command, shell=True)
+            mypath = inspect.getfile(inspect.currentframe())
+            print "INFO %s: Ok, exit code of \"%s\" was %s." % ( mypath, command, exit_code )
 
-            print exit_code
+            message = """You will not received updates from the Whonix team.
 
-            message = """Some text here, warning that Whonix updates won't take place automatically, but the user can re-run
-whonix-repository-wizard
-
-plus whonix_repository exit code."""
+You can always start the Whonix Repository Tool again by running Start Menu -> Applications -> System -> Whonix Repository."""
             warn = QtGui.QMessageBox.information(self, 'Message', message, QtGui.QMessageBox.Ok)
             self.close()
             sys.exit()
@@ -115,6 +117,10 @@ if __name__ == "__main__":
         codename = ' --codename developers'
     command = 'whonix_repository --enable' + codename
     exit_code = call(command, shell=True)
-    print exit_code
-    msg = QtGui.QMessageBox.information(wizard, 'Message', 'whonix_repository was succesful, or whatever according to exit code', QtGui.QMessageBox.Ok)
+    mypath = inspect.getfile(inspect.currentframe())
+    print "INFO %s: Ok, exit code of \"%s\" was %s." % ( mypath, command, exit_code )
+    message = """Updates from the Whonix team will be automatically installed when you upgrade.
+
+You can always start the Whonix Repository Tool again by running Start Menu -> Applications -> System -> Whonix Repository."""
+    msg = QtGui.QMessageBox.information(wizard, 'Whonix Repository Wizard', message, QtGui.QMessageBox.Ok)
     sys.exit()
