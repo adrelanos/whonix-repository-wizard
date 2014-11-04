@@ -72,11 +72,11 @@ to understand the risks. </p>""")
         self.repo2.setText("Whonix Testers Repository")
         self.repo3.setText("Whonix Developers Repository")
 
-        self.fisnish_text_disabled = """<p>You will not received updates from the Whonix team.</p>
+        self.finish_text_disabled = """<p>You will not received updates from the Whonix team.</p>
 <p>You can always start the Whonix Repository Tool again by running</p>
 <blockquote>Start Menu -> Applications -> System -> Whonix Repository.</blockquote>"""
 
-        self.fisnish_text_enabled = """<p>Updates from the Whonix team will be automatically installed when you upgrade.</p>
+        self.finish_text_enabled = """<p>Updates from the Whonix team will be automatically installed when you upgrade.</p>
 <p>You can always start the Whonix Repository Tool again by running</p>
 <blockquote>Start Menu -> Applications -> System -> Whonix Repository.</blockquote>"""
 
@@ -102,7 +102,7 @@ to understand the risks. </p>""")
                 if self.oneShot:
                     command = 'whonix_repository --disable'
                     exit_code = call(command, shell=True)
-                    self.finishText.setText(self.fisnish_text_disabled)
+                    self.finishText.setText(self.finish_text_disabled)
                     mypath = inspect.getfile(inspect.currentframe())
                     print "INFO %s: Ok, exit code of \"%s\" was %s." % ( mypath, command, exit_code )
                     self.oneShot = False
@@ -117,7 +117,7 @@ to understand the risks. </p>""")
             if self.oneShot:
                 command = 'whonix_repository --enable' + codename
                 exit_code = call(command, shell=True)
-                self.finishText.setText(self.fisnish_text_enabled)
+                self.finishText.setText(self.finish_text_enabled)
                 mypath = inspect.getfile(inspect.currentframe())
                 print "INFO %s: Ok, exit code of \"%s\" was %s." % ( mypath, command, exit_code )
                 self.oneShot = False
