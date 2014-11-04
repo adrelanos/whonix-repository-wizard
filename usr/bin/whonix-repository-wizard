@@ -12,18 +12,18 @@ class Whonix_repository_Wizard(QtGui.QWizard):
         self.setupUi()
 
     def setupUi(self):
-        self.resize(455, 310)
+        self.resize(470, 310)
         self.setWindowTitle('Whonix Repository wizard')
         icon = "/usr/share/icons/anon-icon-pack/whonix.ico"
         self.setWindowIcon(QtGui.QIcon(icon))
 
         self.pageEnable = QtGui.QWizardPage()
         self.enableText = QtGui.QLabel(self.pageEnable)
-        self.enableText.setGeometry(QtCore.QRect(10, 10, 430, 150))
+        self.enableText.setGeometry(QtCore.QRect(10, 10, 445, 150))
         self.enableText.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.enableText.setWordWrap(True)
         self.enableGroup = QtGui.QGroupBox(self.pageEnable)
-        self.enableGroup.setGeometry(QtCore.QRect(10, 180, 430, 60))
+        self.enableGroup.setGeometry(QtCore.QRect(10, 180, 445, 60))
         self.enableButton = QtGui.QRadioButton(self.enableGroup)
         self.enableButton.setGeometry(QtCore.QRect(30, 10, 400, 21))
         self.enableButton.setChecked(True)
@@ -37,7 +37,7 @@ class Whonix_repository_Wizard(QtGui.QWizard):
         self.repoText.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.repoText.setWordWrap(True)
         self.repoGroup = QtGui.QGroupBox(self.pageRepos)
-        self.repoGroup.setGeometry(QtCore.QRect(10, 150, 430, 90))
+        self.repoGroup.setGeometry(QtCore.QRect(10, 150, 445, 90))
         self.repo1 = QtGui.QRadioButton(self.repoGroup)
         self.repo1.setGeometry(QtCore.QRect(30, 20, 300, 21))
         self.repo1.setChecked(True)
@@ -49,7 +49,7 @@ class Whonix_repository_Wizard(QtGui.QWizard):
 
         self.pageFinish = QtGui.QWizardPage()
         self.finishText = QtGui.QLabel(self.pageFinish)
-        self.finishText.setGeometry(QtCore.QRect(10, 10, 430, 140))
+        self.finishText.setGeometry(QtCore.QRect(10, 10, 470, 140))
         self.finishText.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.finishText.setWordWrap(True)
         self.addPage(self.pageFinish)
