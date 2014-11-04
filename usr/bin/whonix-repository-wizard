@@ -103,7 +103,6 @@ to understand the risks. </p>""")
                     command = 'whonix_repository --disable'
                     exit_code = call(command, shell=True)
                     self.finishText.setText(self.fisnish_text_disabled)
-                    #self.button(QtGui.QWizard.BackButton).enabled(False)
                     mypath = inspect.getfile(inspect.currentframe())
                     print "INFO %s: Ok, exit code of \"%s\" was %s." % ( mypath, command, exit_code )
                     self.oneShot = False
@@ -117,8 +116,7 @@ to understand the risks. </p>""")
                 codename = ' --codename developers'
             if self.oneShot:
                 command = 'whonix_repository --enable' + codename
-                exit_code = self.process.start(command)
-                #exit_code = call(command, shell=True)
+                exit_code = call(command, shell=True)
                 self.finishText.setText(self.fisnish_text_enabled)
                 mypath = inspect.getfile(inspect.currentframe())
                 print "INFO %s: Ok, exit code of \"%s\" was %s." % ( mypath, command, exit_code )
