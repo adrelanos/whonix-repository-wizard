@@ -13,7 +13,7 @@ class Whonix_repository_Wizard(QtGui.QWizard):
 
     def setupUi(self):
         self.resize(470, 310)
-        self.setWindowTitle('Whonix Repository wizard')
+        self.setWindowTitle('Whonix Repository Wizard')
         icon = "/usr/share/icons/anon-icon-pack/whonix.ico"
         self.setWindowIcon(QtGui.QIcon(icon))
 
@@ -131,7 +131,7 @@ if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
 
     if os.getuid() != 0:
-        print 'ERROR: This must be run as root!'
+        print 'ERROR: This must be run as root!\nUse "kdesudo".'
         sys.exit(1)
 
     wizard = Whonix_repository_Wizard()
