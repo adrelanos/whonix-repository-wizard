@@ -3,8 +3,8 @@
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import qDebug
 from subprocess import call
-import os
-import inspect
+import os, inspect
+
 
 class Whonix_repository_Wizard(QtGui.QWizard):
     def __init__(self):
@@ -12,28 +12,18 @@ class Whonix_repository_Wizard(QtGui.QWizard):
         self.setupUi()
 
     def setupUi(self):
-        self.resize(500, 360)
-        self.setWindowTitle('Whonix Repository Wizard')
+        self.resize(455, 310)
+        self.setWindowTitle('Whonix Repository wizard')
         icon = "/usr/share/icons/anon-icon-pack/whonix.ico"
         self.setWindowIcon(QtGui.QIcon(icon))
 
-        self.button(QtGui.QWizard.NextButton).clicked.connect(self.NextButton_clicked)
-        self.button(QtGui.QWizard.CancelButton).clicked.connect(self.CancelButton_clicked)
-
-        self.pageIntro = QtGui.QWizardPage()
-        self.introText = QtGui.QLabel(self.pageIntro)
-        self.introText.setGeometry(QtCore.QRect(10, 10, 480, 280))
-        self.introText.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
-        self.introText.setWordWrap(True)
-        self.addPage(self.pageIntro)
-
         self.pageEnable = QtGui.QWizardPage()
         self.enableText = QtGui.QLabel(self.pageEnable)
-        self.enableText.setGeometry(QtCore.QRect(10, 10, 490, 241))
+        self.enableText.setGeometry(QtCore.QRect(10, 10, 430, 150))
         self.enableText.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.enableText.setWordWrap(True)
         self.enableGroup = QtGui.QGroupBox(self.pageEnable)
-        self.enableGroup.setGeometry(QtCore.QRect(10, 230, 480, 60))
+        self.enableGroup.setGeometry(QtCore.QRect(10, 180, 430, 60))
         self.enableButton = QtGui.QRadioButton(self.enableGroup)
         self.enableButton.setGeometry(QtCore.QRect(30, 10, 400, 21))
         self.enableButton.setChecked(True)
@@ -43,11 +33,11 @@ class Whonix_repository_Wizard(QtGui.QWizard):
 
         self.pageRepos = QtGui.QWizardPage()
         self.repoText = QtGui.QLabel(self.pageRepos)
-        self.repoText.setGeometry(QtCore.QRect(10, 10, 390, 241))
+        self.repoText.setGeometry(QtCore.QRect(10, 10, 430, 140))
         self.repoText.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.repoText.setWordWrap(True)
         self.repoGroup = QtGui.QGroupBox(self.pageRepos)
-        self.repoGroup.setGeometry(QtCore.QRect(10, 200, 480, 90))
+        self.repoGroup.setGeometry(QtCore.QRect(10, 150, 430, 90))
         self.repo1 = QtGui.QRadioButton(self.repoGroup)
         self.repo1.setGeometry(QtCore.QRect(30, 20, 300, 21))
         self.repo1.setChecked(True)
@@ -57,70 +47,95 @@ class Whonix_repository_Wizard(QtGui.QWizard):
         self.repo3.setGeometry(QtCore.QRect(30, 60, 300, 21))
         self.addPage(self.pageRepos)
 
-        self.introText.setText('Whonix Repository Wizard')
+        self.pageFinish = QtGui.QWizardPage()
+        self.finishText = QtGui.QLabel(self.pageFinish)
+        self.finishText.setGeometry(QtCore.QRect(10, 10, 430, 140))
+        self.finishText.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
+        self.finishText.setWordWrap(True)
+        self.addPage(self.pageFinish)
 
         self.enableText.setText("""<p><B>Automatically install updates from the Whonix team?</B></p><p>\n
 Whonix News (via whonixcheck) will notify you of available updates.</p>
 <p>When you run</p><blockquote>sudo apt-get dist-upgrade</blockquote>
 <p>updates from the Whonix team will be AUTOMATICALLY downloaded and installed,
-along with updates from the Debian team. Please read <a href=https://www.whonix.org/wiki/Trust>https://www.whonix.org/wiki/Trust</a> to understand the risks. </p>
+along with updates from the Debian team. Please read <a href=https://www.whonix.org/wiki/Trust>https://www.whonix.org/wiki/Trust</a>
+to understand the risks. </p>""")
 
-""")
-
-        self.repoText.setText("""<p>Which Whonix Repository would you like to receive updates from?<br></br>
-<br></br>
-Most users should select the Stable repository.</p>""")
+        self.repoText.setText("""<p>Which Whonix Repository would you like to receive updates from?<p>
+<p>Most users should select the Stable repository.</p>""")
 
         self.enableButton.setText("Yes. Automatically install updates from the Whonix team.")
         self.disableButton.setText("No. I will manually update from source code.")
 
-        self.repoGroup.setTitle("Whonix Repository Wizard")
+        self.repoGroup.setTitle("Repository")
         self.repo1.setText("Whonix Stable Repository")
         self.repo2.setText("Whonix Testers Repository")
         self.repo3.setText("Whonix Developers Repository")
 
-    def NextButton_clicked(self):
-        if self.disableButton.isChecked():
-            self.hide()
-            command = 'whonix_repository --disable'
-            #self.close()
-            exit_code = call(command, shell=True)
-            mypath = inspect.getfile(inspect.currentframe())
-            print "INFO %s: Ok, exit code of \"%s\" was %s." % ( mypath, command, exit_code )
+        self.fisnish_text_disabled = """<p>You will not received updates from the Whonix team.</p>
+<p>You can always start the Whonix Repository Tool again by running</p>
+<blockquote>Start Menu -> Applications -> System -> Whonix Repository.</blockquote>"""
 
-            message = """You will not received updates from the Whonix team.
+        self.fisnish_text_enabled = """<p>Updates from the Whonix team will be automatically installed when you upgrade.</p>
+<p>You can always start the Whonix Repository Tool again by running</p>
+<blockquote>Start Menu -> Applications -> System -> Whonix Repository.</blockquote>"""
 
-You can always start the Whonix Repository Tool again by running Start Menu -> Applications -> System -> Whonix Repository."""
-            warn = QtGui.QMessageBox.information(self, 'Message', message, QtGui.QMessageBox.Ok)
-            self.close()
-            sys.exit()
+        # The event handler checks the wizard nextId() several times for the same page.
+        # Send command once only.
+        self.oneShot = True
 
-    def CancelButton_clicked(self):
-        sys.exit()
+        self.button(QtGui.QWizard.BackButton).clicked.connect(self.BackButton_clicked)
+
+        self.exec_()
+
+    # re-arm command.
+    def BackButton_clicked(self):
+        if not self.oneShot:
+            self.oneShot = True
+
+    # overload QWizard.nextId()
+    def nextId(self):
+        if self.currentId() < 2:
+            if self.enableButton.isChecked():
+                return self.currentId() + 1
+            elif self.disableButton.isChecked():
+                if self.oneShot:
+                    command = 'whonix_repository --disable'
+                    exit_code = call(command, shell=True)
+                    self.finishText.setText(self.fisnish_text_disabled)
+                    #self.button(QtGui.QWizard.BackButton).enabled(False)
+                    mypath = inspect.getfile(inspect.currentframe())
+                    print "INFO %s: Ok, exit code of \"%s\" was %s." % ( mypath, command, exit_code )
+                    self.oneShot = False
+                return self.currentId() + 2
+        elif self.currentId() == 2:
+            if self.repo1.isChecked():
+                codename = ' --codename stable'
+            elif self.repo2.isChecked():
+                codename = ' --codename testers'
+            elif self.repo3.isChecked():
+                codename = ' --codename developers'
+            if self.oneShot:
+                command = 'whonix_repository --enable' + codename
+                exit_code = self.process.start(command)
+                #exit_code = call(command, shell=True)
+                self.finishText.setText(self.fisnish_text_enabled)
+                mypath = inspect.getfile(inspect.currentframe())
+                print "INFO %s: Ok, exit code of \"%s\" was %s." % ( mypath, command, exit_code )
+                self.oneShot = False
+            return -1
+        else:
+            return -1
 
 
 if __name__ == "__main__":
     import sys
     app = QtGui.QApplication(sys.argv)
+
     if os.getuid() != 0:
         print 'ERROR: This must be run as root!'
         sys.exit(1)
 
     wizard = Whonix_repository_Wizard()
-    wizard.exec_()
 
-    if wizard.repo1.isChecked():
-        codename = ' --codename stable'
-    elif wizard.repo2.isChecked():
-        codename = ' --codename testers'
-    elif wizard.repo3.isChecked():
-        codename = ' --codename developers'
-    command = 'whonix_repository --enable' + codename
-    exit_code = call(command, shell=True)
-    mypath = inspect.getfile(inspect.currentframe())
-    print "INFO %s: Ok, exit code of \"%s\" was %s." % ( mypath, command, exit_code )
-    message = """Updates from the Whonix team will be automatically installed when you upgrade.
-
-You can always start the Whonix Repository Tool again by running Start Menu -> Applications -> System -> Whonix Repository."""
-    msg = QtGui.QMessageBox.information(wizard, 'Whonix Repository Wizard', message, QtGui.QMessageBox.Ok)
     sys.exit()
