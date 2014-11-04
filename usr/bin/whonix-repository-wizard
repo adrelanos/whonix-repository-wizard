@@ -6,6 +6,21 @@ from subprocess import call
 import os, inspect
 
 
+class GUI_message(QtGui.QMessageBox):
+    def __init__(self):
+        super(GUI_message, self).__init__()
+        self.initUI()
+
+    def initUI(self):
+        self.setWindowIcon(QtGui.QIcon("/usr/share/icons/anon-icon-pack/whonix.ico"))
+        self.setIcon(QtGui.QMessageBox.Critical)
+        self.setWindowTitle('Whonix Repository Wizard')
+        self.setStandardButtons(QtGui.QMessageBox.Ok)
+        message = 'ERROR: This must be run as root!\n\nUse "kdesudo" in terminal or a root file manager.'
+        self.setText(message)
+        self.exec_()
+
+
 class Whonix_repository_Wizard(QtGui.QWizard):
     def __init__(self):
         super(Whonix_repository_Wizard, self).__init__()
@@ -130,8 +145,10 @@ if __name__ == "__main__":
     import sys
     app = QtGui.QApplication(sys.argv)
 
+    # root check.
     if os.getuid() != 0:
         print 'ERROR: This must be run as root!\nUse "kdesudo".'
+        not_root = GUI_message()
         sys.exit(1)
 
     wizard = Whonix_repository_Wizard()
