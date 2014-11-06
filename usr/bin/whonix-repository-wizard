@@ -119,7 +119,10 @@ to understand the risks. </p>""")
                     exit_code = call(command, shell=True)
                     self.finishText.setText(self.finish_text_disabled)
                     mypath = inspect.getfile(inspect.currentframe())
-                    message = "INFO %s: Ok, exit code of \"%s\" was %s." % ( mypath, command, exit_code )
+                    if exit_code == 0:
+                        message = "INFO %s: Ok, exit code of \"%s\" was %s." % ( mypath, command, exit_code )
+                    else:
+                        message = "ERROR %s: exit code of \"%s\" was %s." % ( mypath, command, exit_code )
                     command = 'echo ' + message
                     call(command, shell=True)
                     self.oneShot = False
@@ -136,7 +139,10 @@ to understand the risks. </p>""")
                 exit_code = call(command, shell=True)
                 self.finishText.setText(self.finish_text_enabled)
                 mypath = inspect.getfile(inspect.currentframe())
-                message = "INFO %s: Ok, exit code of \"%s\" was %s." % ( mypath, command, exit_code )
+                if exit_code == 0:
+                    message = "INFO %s: Ok, exit code of \"%s\" was %s." % ( mypath, command, exit_code )
+                else:
+                    message = "ERROR %s: exit code of \"%s\" was %s." % ( mypath, command, exit_code )
                 command = 'echo ' + message
                 call(command, shell=True)
                 self.oneShot = False
