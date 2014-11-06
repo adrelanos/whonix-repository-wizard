@@ -117,11 +117,16 @@ to understand the risks. </p>""")
                 if self.oneShot:
                     command = 'whonix_repository --disable'
                     exit_code = call(command, shell=True)
-                    self.finishText.setText(self.finish_text_disabled)
                     mypath = inspect.getfile(inspect.currentframe())
                     if exit_code == 0:
+                        self.finishText.setText(self.finish_text_disabled)
                         message = "INFO %s: Ok, exit code of \"%s\" was %s." % ( mypath, command, exit_code )
                     else:
+                        self.finish_text_failed = """<p>ERROR %s: exit code of \"%s\" was %s.</p>
+<p>Please report this Whonix bug!</p>
+<p>You can always start the Whonix Repository Tool again by running</p>
+<blockquote>Start Menu -> Applications -> System -> Whonix Repository.</blockquote>""" % ( mypath, command, exit_code )
+                        self.finishText.setText(self.finish_text_failed)
                         message = "ERROR %s: exit code of \"%s\" was %s." % ( mypath, command, exit_code )
                     command = 'echo ' + message
                     call(command, shell=True)
@@ -137,11 +142,16 @@ to understand the risks. </p>""")
             if self.oneShot:
                 command = 'whonix_repository --enable' + codename
                 exit_code = call(command, shell=True)
-                self.finishText.setText(self.finish_text_enabled)
                 mypath = inspect.getfile(inspect.currentframe())
                 if exit_code == 0:
+                    self.finishText.setText(self.finish_text_enabled)
                     message = "INFO %s: Ok, exit code of \"%s\" was %s." % ( mypath, command, exit_code )
                 else:
+                    self.finish_text_failed = """<p>ERROR %s: exit code of \"%s\" was %s.</p>
+<p>Please report this Whonix bug!</p>
+<p>You can always start the Whonix Repository Tool again by running</p>
+<blockquote>Start Menu -> Applications -> System -> Whonix Repository.</blockquote>""" % ( mypath, command, exit_code )
+                    self.finishText.setText(self.finish_text_failed)
                     message = "ERROR %s: exit code of \"%s\" was %s." % ( mypath, command, exit_code )
                 command = 'echo ' + message
                 call(command, shell=True)
