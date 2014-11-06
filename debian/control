@@ -14,7 +14,8 @@ Standards-Version: 3.9.4
 
 Package: whonix-repository-wizard
 Architecture: all
-Depends: whonix-repository, ${misc:Depends}, ${python:Depends}
+Depends: whonix-repository, menu, ${misc:Depends}, ${python:Depends}
+Recommends: anon-icon-pack
 Description: GUI Whonix APT Repository Tool
  This tool can always be used to enable either Whonix's stable, testers or
  developers repository or to disable Whonix's repository.
