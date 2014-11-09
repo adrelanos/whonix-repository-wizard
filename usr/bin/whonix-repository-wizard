@@ -4,7 +4,10 @@ from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import qDebug
 from subprocess import call
 import os, inspect
+import locale, yaml
 
+
+DEFAULT_LANG = 'en'
 
 class GUI_message(QtGui.QMessageBox):
     def __init__(self):
@@ -24,6 +27,16 @@ class GUI_message(QtGui.QMessageBox):
 class Whonix_repository_Wizard(QtGui.QWizard):
     def __init__(self):
         super(Whonix_repository_Wizard, self).__init__()
+        language = DEFAULT_LANG
+
+        language = locale.getdefaultlocale()[0].split('_')[0]
+        if language:
+            self.language = language
+
+        translations = '/usr/share/whonix/whonix-shared-translations'
+        stream = file(translations, 'r')
+        self.data = yaml.load(stream)
+
         self.setupUi()
 
     def setupUi(self):
@@ -64,36 +77,39 @@ class Whonix_repository_Wizard(QtGui.QWizard):
 
         self.pageFinish = QtGui.QWizardPage()
         self.finishText = QtGui.QLabel(self.pageFinish)
-        self.finishText.setGeometry(QtCore.QRect(10, 10, 470, 140))
+        self.finishText.setGeometry(QtCore.QRect(10, 10, 445, 140))
         self.finishText.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.finishText.setWordWrap(True)
         self.addPage(self.pageFinish)
 
-        self.enableText.setText("""<p><B>Automatically install updates from the Whonix team?</B></p><p>\n
-Whonix News (via whonixcheck) will notify you of available updates.</p>
-<p>When you run</p><blockquote>sudo apt-get dist-upgrade</blockquote>
-<p>updates from the Whonix team will be AUTOMATICALLY downloaded and installed,
-along with updates from the Debian team. Please read <a href=https://www.whonix.org/wiki/Trust>https://www.whonix.org/wiki/Trust</a>
-to understand the risks. </p>""")
+        section = self.data['whonix_repository']
+        language = section.get(self.language, DEFAULT_LANG)
 
-        self.repoText.setText("""<p>Which Whonix Repository would you like to receive updates from?<p>
-<p>Most users should select the Stable repository.</p>""")
+        message = language.get('enabletext', None)
+        self.enableText.setText(message)
 
-        self.enableButton.setText("Yes. Automatically install updates from the Whonix team.")
-        self.disableButton.setText("No. I will manually update from source code.")
+        message = language.get('disabletext', None)
+        self.repoText.setText(message)
+
+        message = language.get('enablebutton_text', None)
+        self.enableButton.setText(message)
+
+        message = language.get('disablebutton_text', None)
+        self.disableButton.setText(message)
 
         self.repoGroup.setTitle("Repository")
         self.repo1.setText("Whonix Stable Repository")
         self.repo2.setText("Whonix Testers Repository")
         self.repo3.setText("Whonix Developers Repository")
 
-        self.finish_text_disabled = """<p>You will not receive updates from the Whonix team.</p>
-<p>You can always start the Whonix Repository Tool again by running</p>
-<blockquote>Start Menu -> Applications -> System -> Whonix Repository.</blockquote>"""
+        message = language.get('finish_enabled', None)
+        self.finish_text_disabled = message
 
-        self.finish_text_enabled = """<p>Updates from the Whonix team will be automatically installed when you upgrade.</p>
-<p>You can always start the Whonix Repository Tool again by running</p>
-<blockquote>Start Menu -> Applications -> System -> Whonix Repository.</blockquote>"""
+        message = language.get('finish_disabed', None)
+        self.finish_text_enabled = message
+
+        message = language.get('finish_failed', None)
+        self.finish_text_failed = message
 
         # The event handler checks the wizard nextId() several times for the same page.
         # Send command once only.
@@ -120,14 +136,12 @@ to understand the risks. </p>""")
                     mypath = inspect.getfile(inspect.currentframe())
                     if exit_code == 0:
                         self.finishText.setText(self.finish_text_disabled)
-                        message = "INFO %s: Ok, exit code of \"%s\" was %s." % ( mypath, command, exit_code )
+                        message = 'INFO %s: Ok, exit code of "%s" was %s.' % ( mypath, command, exit_code )
                     else:
-                        self.finish_text_failed = """<p>ERROR %s: exit code of \"%s\" was %s.</p>
-<p>Please report this Whonix bug!</p>
-<p>You can always start the Whonix Repository Tool again by running</p>
-<blockquote>Start Menu -> Applications -> System -> Whonix Repository.</blockquote>""" % ( mypath, command, exit_code )
-                        self.finishText.setText(self.finish_text_failed)
-                        message = "ERROR %s: exit code of \"%s\" was %s." % ( mypath, command, exit_code )
+                        error = '<p>ERROR %s: exit code of \"%s\" was %s.</p>' % ( mypath, command, exit_code )
+                        finish_text_failed =  error + self.finish_text_failed
+                        self.finishText.setText(finish_text_failed)
+                        message = error
                     command = 'echo ' + message
                     call(command, shell=True)
                     self.oneShot = False
@@ -147,12 +161,10 @@ to understand the risks. </p>""")
                     self.finishText.setText(self.finish_text_enabled)
                     message = "INFO %s: Ok, exit code of \"%s\" was %s." % ( mypath, command, exit_code )
                 else:
-                    self.finish_text_failed = """<p>ERROR %s: exit code of \"%s\" was %s.</p>
-<p>Please report this Whonix bug!</p>
-<p>You can always start the Whonix Repository Tool again by running</p>
-<blockquote>Start Menu -> Applications -> System -> Whonix Repository.</blockquote>""" % ( mypath, command, exit_code )
-                    self.finishText.setText(self.finish_text_failed)
-                    message = "ERROR %s: exit code of \"%s\" was %s." % ( mypath, command, exit_code )
+                    error = '<p>ERROR %s: exit code of \"%s\" was %s.</p>' % ( mypath, command, exit_code )
+                    finish_text_failed =  error + self.finish_text_failed
+                    self.finishText.setText(finish_text_failed)
+                    message = error
                 command = 'echo ' + message
                 call(command, shell=True)
                 self.oneShot = False
