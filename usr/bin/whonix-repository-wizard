@@ -41,10 +41,6 @@ class Whonix_repository_Wizard(QtGui.QWizard):
             # TODO Add code here.
             pass
 
-        except (yaml.scanner.ScannerError, yaml.parser.ParserError):
-            # TODO Add code here.
-            pass
-
         self.setupUi()
 
     def setupUi(self):
@@ -90,34 +86,32 @@ class Whonix_repository_Wizard(QtGui.QWizard):
         self.finishText.setWordWrap(True)
         self.addPage(self.pageFinish)
 
-        section = self.data['whonix_repository']
-        language = section.get(self.language, DEFAULT_LANG)
+        try:
+            section = self.data['whonix_repository']
+            language = section.get(self.language, DEFAULT_LANG)
+            message = language.get('enabletext', None)
+            self.enableText.setText(message)
+            message = language.get('disabletext', None)
+            self.repoText.setText(message)
+            message = language.get('enablebutton_text', None)
+            self.enableButton.setText(message)
+            message = language.get('disablebutton_text', None)
+            self.disableButton.setText(message)
+            message = language.get('finish_enabled', None)
+            self.finish_text_disabled = message
+            message = language.get('finish_disabed', None)
+            self.finish_text_enabled = message
+            message = language.get('finish_failed', None)
+            self.finish_text_failed = message
 
-        message = language.get('enabletext', None)
-        self.enableText.setText(message)
-
-        message = language.get('disabletext', None)
-        self.repoText.setText(message)
-
-        message = language.get('enablebutton_text', None)
-        self.enableButton.setText(message)
-
-        message = language.get('disablebutton_text', None)
-        self.disableButton.setText(message)
+        except (yaml.scanner.ScannerError, yaml.parser.ParserError):
+            # TODO Add code here.
+            pass
 
         self.repoGroup.setTitle("Repository")
         self.repo1.setText("Whonix Stable Repository")
         self.repo2.setText("Whonix Testers Repository")
         self.repo3.setText("Whonix Developers Repository")
-
-        message = language.get('finish_enabled', None)
-        self.finish_text_disabled = message
-
-        message = language.get('finish_disabed', None)
-        self.finish_text_enabled = message
-
-        message = language.get('finish_failed', None)
-        self.finish_text_failed = message
 
         # The event handler polls nextId() several times for the same page.
         # Send command once only.
