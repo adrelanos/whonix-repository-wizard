@@ -1,7 +1,6 @@
 #!/usr/bin/python
 
 from PyQt4 import QtCore, QtGui
-from PyQt4.QtCore import qDebug
 from subprocess import call
 import os, inspect
 import locale, yaml
@@ -111,7 +110,7 @@ class Whonix_repository_Wizard(QtGui.QWizard):
         message = language.get('finish_failed', None)
         self.finish_text_failed = message
 
-        # The event handler checks the wizard nextId() several times for the same page.
+        # The event handler polls nextId() several times for the same page.
         # Send command once only.
         self.oneShot = True
 
