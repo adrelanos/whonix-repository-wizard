@@ -26,15 +26,24 @@ class GUI_message(QtGui.QMessageBox):
 class Whonix_repository_Wizard(QtGui.QWizard):
     def __init__(self):
         super(Whonix_repository_Wizard, self).__init__()
-        language = DEFAULT_LANG
 
-        language = locale.getdefaultlocale()[0].split('_')[0]
-        if language:
-            self.language = language
+        # credits to nrgaway.
+        try:
+            language = DEFAULT_LANG
+            language = locale.getdefaultlocale()[0].split('_')[0]
+            if language:
+                self.language = language
+            translations = '/usr/share/whonix/whonix-shared-translations'
+            stream = file(translations, 'r')
+            self.data = yaml.load(stream)
 
-        translations = '/usr/share/whonix/whonix-shared-translations'
-        stream = file(translations, 'r')
-        self.data = yaml.load(stream)
+        except IOError:
+            # TODO Add code here.
+            pass
+
+        except (yaml.scanner.ScannerError, yaml.parser.ParserError):
+            # TODO Add code here.
+            pass
 
         self.setupUi()
 
